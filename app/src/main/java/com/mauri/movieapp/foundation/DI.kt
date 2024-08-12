@@ -1,7 +1,7 @@
 package com.mauri.movieapp.foundation
 
 import com.mauri.movieapp.foundation.network.HTTPClient
-import com.mauri.movieapp.presentation.movielist.MovieListViewModel
+import com.mauri.movieapp.presentation.feature.movielist.MovieListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

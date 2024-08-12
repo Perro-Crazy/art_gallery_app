@@ -1,4 +1,4 @@
-package com.mauri.movieapp.presentation.movielist
+package com.mauri.movieapp.presentation.feature.movielist
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
