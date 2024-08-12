@@ -6,8 +6,8 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 
 object HTTPClient {
-    fun factory() {
-        HttpClient(Android) {
+    fun factory(): HttpClient {
+        return HttpClient(Android) {
             install(ContentNegotiation) {
                 json()
             }
