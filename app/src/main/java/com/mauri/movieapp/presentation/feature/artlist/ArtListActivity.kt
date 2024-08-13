@@ -20,7 +20,7 @@ class ArtListActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.send(ArtListViewModel.Event.Init)
+        if (savedInstanceState == null) viewModel.send(ArtListViewModel.Event.Init)
         enableEdgeToEdge()
         lifecycleScope.launch {
             viewModel.state.collect {

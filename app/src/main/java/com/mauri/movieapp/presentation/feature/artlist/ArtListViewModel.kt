@@ -6,6 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mauri.movieapp.presentation.common.getMutableStateFlow
 import com.mauri.movieapp.domain.ArtListUseCase
+import com.mauri.movieapp.domain.entity.ArtBM
+import com.mauri.movieapp.domain.entity.ThumbnailBM
+import com.mauri.movieapp.presentation.model.ArtVM
+import com.mauri.movieapp.presentation.model.ThumbnailVM
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -30,7 +34,26 @@ class ArtListViewModel(
 
     private suspend fun handleInit() {
         if(state.value is State.Loading) {
-            artListUseCase()
+            mutableState.value = State.Success(
+                data = artListUseCase().map {
+                    with(it) {
+                        ArtVM(
+                            id = id,
+                            title = title,
+                            mainReferenceNumber = mainReferenceNumber,
+                            artistDisplay = artistDisplay,
+                            thumbnail = with(thumbnail) {
+                                ThumbnailVM(
+                                    lqip = lqip,
+                                    width = width,
+                                    height = height,
+                                    altText = altText
+                                )
+                            }
+                        )
+                    }
+                }
+            )
         }
     }
 
@@ -41,6 +64,9 @@ class ArtListViewModel(
     sealed class State : Parcelable {
         @Parcelize
         data object Loading : State()
+
+        @Parcelize
+        data class Success(val data: List<ArtVM>) : State()
     }
 
     companion object  {
