@@ -20,26 +20,22 @@ class ArtListViewModel(
     val state: StateFlow<State>
         get() = mutableState
 
-    init {
-        handleLoading()
-    }
-
     fun send(event: Event) {
         viewModelScope.launch {
-
+            when (event) {
+                Event.Init -> handleInit()
+            }
         }
     }
 
-
-
-    private fun handleLoading() {
+    private suspend fun handleInit() {
         if(state.value is State.Loading) {
             artListUseCase()
         }
     }
 
     sealed class Event {
-
+        data object Init: Event()
     }
 
     sealed class State : Parcelable {

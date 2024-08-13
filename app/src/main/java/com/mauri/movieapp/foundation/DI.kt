@@ -21,7 +21,7 @@ object DI {
         },
         module {
             factory {
-                ArtListUseCase()
+                ArtListUseCase(get())
             }
         },
         module {

@@ -1,7 +1,9 @@
-package com.mauri.movieapp.domain.entity
+package com.mauri.movieapp.data.model
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ArtDM (
   @SerialName("id")
   val id: Int,

@@ -1,7 +1,9 @@
-package com.mauri.movieapp.domain.entity
+package com.mauri.movieapp.data.model
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ThumbnailDM (
   @SerialName("lqip")
   val lqip: String,
