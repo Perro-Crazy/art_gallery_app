@@ -1,19 +1,19 @@
-package com.mauri.movieapp.presentation.feature.movielist
+package com.mauri.movieapp.presentation.feature.artlist
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mauri.movieapp.presentation.common.getMutableStateFlow
-import com.mauri.movieapp.domain.MovieListUseCase
+import com.mauri.movieapp.domain.ArtListUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-class MovieListViewModel(
+class ArtListViewModel(
     handle: SavedStateHandle,
-    private val movieListUseCase: MovieListUseCase
+    private val artListUseCase: ArtListUseCase
 ) : ViewModel() {
 
     private val mutableState: MutableStateFlow<State> = handle.getMutableStateFlow(FLOW_KEY, State.Loading)
@@ -34,7 +34,7 @@ class MovieListViewModel(
 
     private fun handleLoading() {
         if(state.value is State.Loading) {
-            movieListUseCase()
+            artListUseCase()
         }
     }
 

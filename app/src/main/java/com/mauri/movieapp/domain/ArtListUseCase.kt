@@ -1,6 +1,6 @@
 package com.mauri.movieapp.domain
 
-class MovieListUseCase {
+class ArtListUseCase {
     operator fun invoke() {
 
     }

@@ -1,7 +1,9 @@
 package com.mauri.movieapp.foundation
 
+import com.mauri.movieapp.data.ArtRepository
+import com.mauri.movieapp.domain.ArtListUseCase
 import com.mauri.movieapp.foundation.network.HTTPClient
-import com.mauri.movieapp.presentation.feature.movielist.MovieListViewModel
+import com.mauri.movieapp.presentation.feature.artlist.ArtListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -14,7 +16,17 @@ object DI {
         },
         module {
             viewModel {
-                MovieListViewModel(get())
+                ArtListViewModel(get(), get())
+            }
+        },
+        module {
+            factory {
+                ArtListUseCase()
+            }
+        },
+        module {
+            factory {
+                ArtRepository(get())
             }
         }
     )

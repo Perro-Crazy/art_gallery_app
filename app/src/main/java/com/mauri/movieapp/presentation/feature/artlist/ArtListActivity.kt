@@ -1,4 +1,4 @@
-package com.mauri.movieapp.presentation.feature.movielist
+package com.mauri.movieapp.presentation.feature.artlist
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,9 +14,9 @@ import com.mauri.movieapp.presentation.common.theme.MovieAppTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MovieListActivity : ComponentActivity() {
+class ArtListActivity : ComponentActivity() {
 
-    private val viewModel by viewModel<MovieListViewModel>()
+    private val viewModel by viewModel<ArtListViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +28,7 @@ class MovieListActivity : ComponentActivity() {
                     MovieAppTheme {
                         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                             Box(modifier = Modifier.padding(innerPadding)) {
-                                MovieListScreen.Render(it)
+                                ArtListScreen.Render(it)
                             }
                         }
                     }
