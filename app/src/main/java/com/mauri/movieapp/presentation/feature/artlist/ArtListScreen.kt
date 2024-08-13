@@ -1,7 +1,7 @@
 package com.mauri.movieapp.presentation.feature.artlist
 
-import android.util.Log
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,25 +22,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.mauri.movieapp.presentation.model.ArtVM
 
 
 object ArtListScreen {
-    @Composable
-    fun Render(state: ArtListViewModel.State) {
-        when (state) {
-            is ArtListViewModel.State.Loading -> LoadingRender()
-            is ArtListViewModel.State.Success -> SuccessRender(state)
-        }
+
+    interface ScreenInteraction {
+        fun onSelectedArt(art: ArtVM)
     }
 
     @Composable
-    private fun SuccessRender(state: ArtListViewModel.State.Success) {
+    fun DetailRender(state: ArtListViewModel.State.Success) {
+        Text("Detalhe")
+    }
+
+    @Composable
+    fun SuccessRender(
+        state: ArtListViewModel.State.Success,
+        screenInteraction: ScreenInteraction
+    ) {
         LazyColumn {
             items(state.data.size, itemContent = {
                 state.data[it].run {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
+                            .clickable { screenInteraction.onSelectedArt(this) }
                             .fillMaxSize()
                             .padding(10.dp)
                     ) {
@@ -77,7 +84,7 @@ object ArtListScreen {
     }
 
     @Composable
-    private fun LoadingRender() {
+    fun LoadingRender() {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,

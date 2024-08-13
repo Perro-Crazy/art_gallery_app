@@ -24,8 +24,15 @@ class ArtListViewModel(
     fun send(event: Event) {
         viewModelScope.launch {
             when (event) {
-                Event.Init -> handleInit()
+                is Event.Init -> handleInit()
+                is Event.SelectArt -> handleSelectArt(event)
             }
+        }
+    }
+
+    private fun handleSelectArt(event: Event.SelectArt) {
+        if(state.value is State.Success) {
+            mutableState.value = (state.value as State.Success).copy(selectedArt = event.art)
         }
     }
 
@@ -49,6 +56,7 @@ class ArtListViewModel(
 
     sealed class Event {
         data object Init: Event()
+        data class SelectArt(val art: ArtVM): Event()
     }
 
     sealed class State : Parcelable {
@@ -56,7 +64,10 @@ class ArtListViewModel(
         data object Loading : State()
 
         @Parcelize
-        data class Success(val data: List<ArtVM>) : State()
+        data class Success(
+            val data: List<ArtVM>,
+            val selectedArt: ArtVM? = null
+        ) : State()
     }
 
     companion object  {
