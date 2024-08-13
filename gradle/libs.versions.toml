@@ -10,7 +10,6 @@ activityCompose = "1.9.1"
 composeBom = "2024.06.00"
 ktor = "2.3.3"
 koin = "3.5.6"
-serialization = "1.8.10"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,7 +31,6 @@ ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-conte
 ktor-client-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-serialization-jvm = { group = "io.ktor", name = "ktor-client-serialization-jvm", version.ref = "ktor" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
-
 koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 
 [plugins]

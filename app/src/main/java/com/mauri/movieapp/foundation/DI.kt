@@ -14,7 +14,7 @@ object DI {
         },
         module {
             viewModel {
-                MovieListViewModel()
+                MovieListViewModel(get())
             }
         }
     )
