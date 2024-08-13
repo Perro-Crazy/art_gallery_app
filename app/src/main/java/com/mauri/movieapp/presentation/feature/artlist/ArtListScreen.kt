@@ -1,7 +1,9 @@
 package com.mauri.movieapp.presentation.feature.artlist
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,7 +40,9 @@ object ArtListScreen {
                 state.data[it].run {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxSize().padding(10.dp)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(10.dp)
                     ) {
                         AsyncImage(
                             contentScale = ContentScale.Crop,
@@ -51,8 +55,21 @@ object ArtListScreen {
                         )
                         Text(
                             text = title,
-                            modifier = Modifier.fillMaxWidth().padding(10.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp)
                         )
+                    }
+
+                    if (it == state.data.size - 1) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(10.dp)
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
             })

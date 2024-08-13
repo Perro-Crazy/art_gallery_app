@@ -10,6 +10,7 @@ class ArtListUseCase(
         return artRepository
             .getAll()
             .data
+            .filter { it.imageId != null }
             .map {
                 with(it) {
                     ArtBM(
