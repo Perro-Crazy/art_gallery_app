@@ -4,7 +4,7 @@ package com.mauri.movieapp.domain.entity
 data class ArtBM (
   val id: Int,
   val title: String,
-  val thumbnail: ThumbnailBM,
+  val image: String,
   val mainReferenceNumber: String,
   val artistDisplay: String
 )

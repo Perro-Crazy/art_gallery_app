@@ -67,6 +67,9 @@ dependencies {
     implementation(libs.ktor.client.serialization)
     implementation(libs.ktor.client.serialization.jvm)
     implementation(libs.koin)
+    implementation(libs.coil)
+    implementation(libs.coil.gif)
+    implementation(libs.coil.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

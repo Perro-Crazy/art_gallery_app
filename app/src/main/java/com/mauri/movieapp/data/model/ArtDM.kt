@@ -9,8 +9,8 @@ data class ArtDM (
   val id: Int,
   @SerialName("title")
   val title: String,
-  @SerialName("thumbnail")
-  val thumbnail: ThumbnailDM,
+  @SerialName("image_id")
+  val imageId: String,
   @SerialName("main_reference_number")
   val mainReferenceNumber: String,
   @SerialName("artist_display")

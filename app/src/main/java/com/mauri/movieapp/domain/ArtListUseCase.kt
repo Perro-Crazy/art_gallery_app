@@ -2,7 +2,6 @@ package com.mauri.movieapp.domain
 
 import com.mauri.movieapp.data.ArtRepository
 import com.mauri.movieapp.domain.entity.ArtBM
-import com.mauri.movieapp.domain.entity.ThumbnailBM
 
 class ArtListUseCase(
     private val artRepository: ArtRepository
@@ -18,14 +17,7 @@ class ArtListUseCase(
                         title = title,
                         mainReferenceNumber = mainReferenceNumber,
                         artistDisplay = artistDisplay,
-                        thumbnail = with(thumbnail) {
-                            ThumbnailBM(
-                                lqip = lqip,
-                                width = width,
-                                height = height,
-                                altText = altText
-                            )
-                        }
+                        image = "https://www.artic.edu/iiif/2/$imageId/full/843,/0/default.jpg"
                     )
                 }
             }

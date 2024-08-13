@@ -10,7 +10,7 @@ class ArtRepository(
 ) {
     suspend fun getAll(): ArticDM {
         return httpClient.get(
-            "https://api.artic.edu/api/v1/artworks?fields=id,title,artist_display,main_reference_number,thumbnail"
+            "https://api.artic.edu/api/v1/artworks?fields=id,title,artist_display,main_reference_number,image_id"
         ).body<ArticDM>()
     }
 }

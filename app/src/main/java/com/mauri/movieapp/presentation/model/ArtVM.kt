@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class ArtVM (
   val id: Int,
   val title: String,
-  val thumbnail: ThumbnailVM,
+  val image: String,
   val mainReferenceNumber: String,
   val artistDisplay: String
 ): Parcelable

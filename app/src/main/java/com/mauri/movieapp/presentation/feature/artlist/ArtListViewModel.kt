@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mauri.movieapp.presentation.common.getMutableStateFlow
 import com.mauri.movieapp.domain.ArtListUseCase
-import com.mauri.movieapp.domain.entity.ArtBM
-import com.mauri.movieapp.domain.entity.ThumbnailBM
 import com.mauri.movieapp.presentation.model.ArtVM
-import com.mauri.movieapp.presentation.model.ThumbnailVM
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -42,14 +39,7 @@ class ArtListViewModel(
                             title = title,
                             mainReferenceNumber = mainReferenceNumber,
                             artistDisplay = artistDisplay,
-                            thumbnail = with(thumbnail) {
-                                ThumbnailVM(
-                                    lqip = lqip,
-                                    width = width,
-                                    height = height,
-                                    altText = altText
-                                )
-                            }
+                            image = image
                         )
                     }
                 }
