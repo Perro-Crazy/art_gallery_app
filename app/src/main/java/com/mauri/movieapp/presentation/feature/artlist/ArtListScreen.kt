@@ -1,6 +1,7 @@
 package com.mauri.movieapp.presentation.feature.artlist
 
 import android.widget.TextView
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,8 +18,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,62 +40,80 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mauri.movieapp.presentation.model.ArtVM
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 object ArtListScreen {
 
     @Composable
     fun DetailRender(
-        state: ArtListViewModel.State.Success
+        state: ArtListViewModel.State.Success,
+        onBack: () -> Unit
     ) {
 
-        with(checkNotNull(state.selectedArt)) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 10.dp, end = 10.dp),
-                contentAlignment = Alignment.TopCenter
-            ) {
+        state.selectedArt?.run {
+            Column {
+                TopAppBar(
+                    title = { Text(text = title) },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            onBack()
+                        }) {
+                            Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null)
+                        }
+                    }
+                )
 
-                Column(
+                BackHandler {
+                    onBack()
+                }
+
+                Box(
                     modifier = Modifier
-                        .verticalScroll(rememberScrollState())
+                        .fillMaxSize()
+                        .padding(start = 10.dp, end = 10.dp),
+                    contentAlignment = Alignment.TopCenter
                 ) {
-                    Row {
-                        AsyncImage(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(300.dp) ,
-                            contentScale = ContentScale.Crop,
-                            model = image,
-                            contentDescription = null
+
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        Row {
+                            AsyncImage(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(300.dp) ,
+                                contentScale = ContentScale.Crop,
+                                model = image,
+                                contentDescription = null
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Row {
+                            Text(
+                                text = "Author: $title",
+                                fontSize = 15.sp
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Row {
+                            Text(
+                                text = "Artist display: $artistDisplay",
+                                fontSize = 15.sp
+                            )
+                        }
+                        Spacer(
+                            modifier = Modifier.height(10.dp)
                         )
+                        Row {
+                            AndroidView(
+                                factory = { context -> TextView(context) },
+                                update = {
+                                    it.text = HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_COMPACT)
+                                }
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row {
-                        Text(
-                            text = "Author: $title",
-                            fontSize = 15.sp
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row {
-                        Text(
-                            text = "Artist display: $artistDisplay",
-                            fontSize = 15.sp
-                        )
-                    }
-                    Spacer(
-                        modifier = Modifier.height(10.dp)
-                    )
-                    Row {
-                        AndroidView(
-                            factory = { context -> TextView(context) },
-                            update = {
-                                it.text = HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_COMPACT)
-                            }
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
         }
@@ -100,49 +125,58 @@ object ArtListScreen {
         onNextPage: () -> Unit,
         onSelectItem: (ArtVM) -> Unit
     ) {
-        LazyColumn {
-            items(state.data.size, itemContent = {
-                state.data[it].run {
-                    Row(
-                        modifier = Modifier
-                            .clickable { onSelectItem(this) }
-                            .fillMaxWidth()
-                            .padding(10.dp)
-                    ) {
+
+        Column {
+            TopAppBar(
+                title = { 
+                    Text(text = "Lista de Obras de Arte")
+                }
+            )
+
+            LazyColumn {
+                items(state.data.size, itemContent = {
+                    state.data[it].run {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .clickable { onSelectItem(this) }
+                                .fillMaxWidth()
+                                .padding(10.dp)
                         ) {
-                            AsyncImage(
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(64.dp)
-                                    .clip(CircleShape)
-                                    .border(1.dp, Color.Blue, CircleShape),
-                                model = image,
-                                contentDescription = null
-                            )
-                            Column(
-                                modifier = Modifier.padding(start = 10.dp)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Text(text = title)
-                                Text(text = origin)
+                                AsyncImage(
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(64.dp)
+                                        .clip(CircleShape)
+                                        .border(1.dp, Color.Blue, CircleShape),
+                                    model = image,
+                                    contentDescription = null
+                                )
+                                Column(
+                                    modifier = Modifier.padding(start = 10.dp)
+                                ) {
+                                    Text(text = title)
+                                    Text(text = origin)
+                                }
+                            }
+                        }
+
+                        if (it == state.data.size - 1) {
+                            onNextPage()
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(10.dp)
+                            ) {
+                                CircularProgressIndicator()
                             }
                         }
                     }
-
-                    if (it == state.data.size - 1) {
-                        onNextPage()
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(10.dp)
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
-                }
-            })
+                })
+            }
         }
     }
 

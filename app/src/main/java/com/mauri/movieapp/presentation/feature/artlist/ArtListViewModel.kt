@@ -31,9 +31,7 @@ class ArtListViewModel(
     private suspend fun handleSelectArt(event: Event.SelectArt) {
         if(state.value is State.Success) {
             setState(
-                (state.value as State.Success).copy(
-                    selectedArt = event.art
-                )
+                (state.value as State.Success).copy(selectedArt = event.art)
             )
         }
     }
@@ -100,7 +98,7 @@ class ArtListViewModel(
 
     sealed class Event {
         data object NextPage : Event()
-        data class SelectArt(val art: ArtVM) : Event()
+        data class SelectArt(val art: ArtVM? = null) : Event()
     }
 
     sealed class State : Parcelable {

@@ -4,9 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -26,38 +24,44 @@ class ArtListActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             MovieAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-                        NavHost(
-                            navController = navController,
-                            startDestination = "wait"
-                        ) {
+                Scaffold(modifier = Modifier.fillMaxSize()) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = "wait"
+                    ) {
 
-                            composable("detail") {
-                                ArtListScreen.DetailRender(
-                                    state = (viewModel.state.collectAsState().value as ArtListViewModel.State.Success)
-                                )
-                            }
+                        composable("detail") {
+                            ArtListScreen.DetailRender(
+                                state = (viewModel.state.collectAsState().value as ArtListViewModel.State.Success),
+                                onBack = {
+                                    viewModel.send(ArtListViewModel.Event.SelectArt())
+                                    navController.popBackStack(
+                                        route = "list",
+                                        inclusive = false,
+                                        saveState = false
+                                    )
+                                }
+                            )
+                        }
 
-                            composable("list") {
-                                ArtListScreen.SuccessRender(
-                                    state = (viewModel.state.collectAsState().value as ArtListViewModel.State.Success),
-                                    onNextPage = {
-                                        viewModel.send(ArtListViewModel.Event.NextPage)
-                                    },
-                                    onSelectItem = {
-                                        viewModel.send(ArtListViewModel.Event.SelectArt(it))
-                                        navController.navigate("detail")
-                                    }
-                                )
-                            }
+                        composable("list") {
+                            ArtListScreen.SuccessRender(
+                                state = (viewModel.state.collectAsState().value as ArtListViewModel.State.Success),
+                                onNextPage = {
+                                    viewModel.send(ArtListViewModel.Event.NextPage)
+                                },
+                                onSelectItem = {
+                                    viewModel.send(ArtListViewModel.Event.SelectArt(it))
+                                    navController.navigate("detail")
+                                }
+                            )
+                        }
 
-                            composable("wait") {
-                                ArtListScreen.LoadingRender(
-                                    state = viewModel.state.collectAsState().value,
-                                    navController = navController
-                                )
-                            }
+                        composable("wait") {
+                            ArtListScreen.LoadingRender(
+                                state = viewModel.state.collectAsState().value,
+                                navController = navController
+                            )
                         }
                     }
                 }
