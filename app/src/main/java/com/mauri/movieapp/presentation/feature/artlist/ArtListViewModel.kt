@@ -2,61 +2,59 @@ package com.mauri.movieapp.presentation.feature.artlist
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mauri.movieapp.presentation.common.getMutableStateFlow
 import com.mauri.movieapp.domain.ArtListUseCase
+import com.mauri.movieapp.foundation.AbstractViewModel
 import com.mauri.movieapp.presentation.model.ArtVM
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class ArtListViewModel(
     handle: SavedStateHandle,
     private val artListUseCase: ArtListUseCase
-) : ViewModel() {
+) : AbstractViewModel<ArtListViewModel.State>(handle, FLOW_KEY, State.Loading) {
 
-    private val mutableState: MutableStateFlow<State> = handle.getMutableStateFlow(FLOW_KEY, State.Loading)
-    val state: StateFlow<State>
-        get() = mutableState
-
+    init {
+        viewModelScope.launch {
+            handleInit()
+        }
+    }
     fun send(event: Event) {
         viewModelScope.launch {
             when (event) {
-                is Event.Init -> handleInit()
                 is Event.SelectArt -> handleSelectArt(event)
             }
         }
     }
 
-    private fun handleSelectArt(event: Event.SelectArt) {
-        if(state.value is State.Success) {
-            mutableState.value = (state.value as State.Success).copy(selectedArt = event.art)
+    private suspend fun handleSelectArt(event: Event.SelectArt) {
+        if(mutableState.value is State.Success) {
+            setState((mutableState.value as State.Success).copy(selectedArt = event.art))
         }
     }
 
     private suspend fun handleInit() {
-        if(state.value is State.Loading) {
-            mutableState.value = State.Success(
-                data = artListUseCase().map {
-                    with(it) {
-                        ArtVM(
-                            id = id,
-                            title = title,
-                            mainReferenceNumber = mainReferenceNumber,
-                            artistDisplay = artistDisplay,
-                            image = image
-                        )
+        if(mutableState.value is State.Loading) {
+            setState(
+                State.Success(
+                    data = artListUseCase().map {
+                        with(it) {
+                            ArtVM(
+                                id = id,
+                                title = title,
+                                mainReferenceNumber = mainReferenceNumber,
+                                artistDisplay = artistDisplay,
+                                image = image
+                            )
+                        }
                     }
-                }
+                )
             )
         }
     }
 
     sealed class Event {
-        data object Init: Event()
-        data class SelectArt(val art: ArtVM): Event()
+        data class SelectArt(val art: ArtVM?): Event()
     }
 
     sealed class State : Parcelable {

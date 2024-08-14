@@ -21,25 +21,36 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.mauri.movieapp.presentation.model.ArtVM
+import kotlinx.coroutines.launch
 
 
 object ArtListScreen {
 
-    interface ScreenInteraction {
-        fun onSelectedArt(art: ArtVM)
-    }
-
     @Composable
-    fun DetailRender(state: ArtListViewModel.State.Success) {
-        Text("Detalhe")
+    fun DetailRender(
+        id: String,
+        state: ArtListViewModel.State.Success
+    ) {
+
+        val art = state.data.first { it.id.toString() == id }
+
+        AsyncImage(
+            contentScale = ContentScale.Crop,
+            model = art.image,
+            contentDescription = null
+        )
+
+        Text(text = art.title)
+
     }
 
     @Composable
     fun SuccessRender(
         state: ArtListViewModel.State.Success,
-        screenInteraction: ScreenInteraction
+        navController: NavHostController
     ) {
         LazyColumn {
             items(state.data.size, itemContent = {
@@ -47,7 +58,7 @@ object ArtListScreen {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .clickable { screenInteraction.onSelectedArt(this) }
+                            .clickable { navController.navigate("detail/${id}") }
                             .fillMaxSize()
                             .padding(10.dp)
                     ) {
@@ -84,7 +95,21 @@ object ArtListScreen {
     }
 
     @Composable
-    fun LoadingRender() {
+    fun LoadingRender(
+        viewModel: ArtListViewModel,
+        lifecycleScope: LifecycleCoroutineScope,
+        navController: NavHostController
+    ) {
+        lifecycleScope.launch {
+            viewModel.state.collect {
+                when (it) {
+                    is ArtListViewModel.State.Success -> navController.navigate("list") {
+                        popUpTo(0)
+                    }
+                    else -> {}
+                }
+            }
+        }
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
