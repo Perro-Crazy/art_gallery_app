@@ -120,7 +120,7 @@ object ArtListScreen {
     }
 
     @Composable
-    fun SuccessRender(
+    fun ListRender(
         state: ArtListViewModel.State.Success,
         onNextPage: () -> Unit,
         onSelectItem: (ArtVM) -> Unit
@@ -128,7 +128,7 @@ object ArtListScreen {
 
         Column {
             TopAppBar(
-                title = { 
+                title = {
                     Text(text = "Lista de Obras de Arte")
                 }
             )

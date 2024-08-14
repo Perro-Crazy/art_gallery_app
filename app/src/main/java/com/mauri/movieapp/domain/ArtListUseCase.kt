@@ -24,17 +24,17 @@ class ArtListUseCase(
                 totalPages = container.pagination.totalPages,
                 data = container.data
                     .filter {
-                        !it.imageId.isNullOrBlank() && !it.description.isNullOrBlank() && !it.origin.isNullOrBlank()
+                        !it.title.isNullOrBlank() && !it.imageId.isNullOrBlank() && !it.description.isNullOrBlank() && !it.origin.isNullOrBlank()
                     }
                     .map {
                         with(it) {
                             ArtBM(
                                 id = id,
-                                title = title,
+                                title = checkNotNull(title),
                                 mainReferenceNumber = mainReferenceNumber,
                                 artistDisplay = artistDisplay,
-                                description = description.orEmpty(),
-                                origin = origin.orEmpty(),
+                                description = checkNotNull(description),
+                                origin = checkNotNull(origin),
                                 image = "https://www.artic.edu/iiif/2/$imageId/full/843,/0/default.jpg"
                             )
                         }

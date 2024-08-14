@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -24,8 +25,9 @@ class ArtListActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             MovieAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
+                Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
                     NavHost(
+                        modifier = Modifier.padding(padding),
                         navController = navController,
                         startDestination = "wait"
                     ) {
@@ -45,7 +47,7 @@ class ArtListActivity : ComponentActivity() {
                         }
 
                         composable("list") {
-                            ArtListScreen.SuccessRender(
+                            ArtListScreen.ListRender(
                                 state = (viewModel.state.collectAsState().value as ArtListViewModel.State.Success),
                                 onNextPage = {
                                     viewModel.send(ArtListViewModel.Event.NextPage)

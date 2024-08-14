@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 data class ArtDM (
   @SerialName("id")
   val id: Int,
-  @SerialName("title")
-  val title: String,
+  @SerialName("artist_title")
+  val title: String?,
   @SerialName("image_id")
   val imageId: String?,
   @SerialName("main_reference_number")
