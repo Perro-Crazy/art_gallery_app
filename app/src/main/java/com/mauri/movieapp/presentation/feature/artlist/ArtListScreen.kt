@@ -1,5 +1,6 @@
 package com.mauri.movieapp.presentation.feature.artlist
 
+import android.widget.TextView
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.text.HtmlCompat
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 
@@ -79,9 +82,11 @@ object ArtListScreen {
                     modifier = Modifier.height(10.dp)
                 )
                 Row {
-                    Text(
-                        text = "Description: ${art.description}",
-                        fontSize = 15.sp
+                    AndroidView(
+                        factory = { context -> TextView(context) },
+                        update = {
+                            it.text = HtmlCompat.fromHtml(art.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
+                        }
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
