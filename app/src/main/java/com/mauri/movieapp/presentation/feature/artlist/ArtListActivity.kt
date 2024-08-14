@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.mauri.movieapp.presentation.common.theme.MovieAppTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -35,27 +33,23 @@ class ArtListActivity : ComponentActivity() {
                             startDestination = "wait"
                         ) {
 
-                            composable(
-                                route = "detail/{id}",
-                                arguments = listOf(
-                                    navArgument("id") {
-                                        type = NavType.StringType
-                                    }
-                                )
-                            ) {
+                            composable("detail") {
                                 ArtListScreen.DetailRender(
-                                    id = checkNotNull(it.arguments?.getString("id")),
-                                    viewModel.state.value as ArtListViewModel.State.Success
+                                    state = (viewModel.state.collectAsState().value as ArtListViewModel.State.Success)
                                 )
                             }
 
                             composable("list") {
                                 ArtListScreen.SuccessRender(
                                     state = (viewModel.state.collectAsState().value as ArtListViewModel.State.Success),
-                                    navController = navController
-                                ) {
-                                    viewModel.send(ArtListViewModel.Event.NextPage)
-                                }
+                                    onNextPage = {
+                                        viewModel.send(ArtListViewModel.Event.NextPage)
+                                    },
+                                    onSelectItem = {
+                                        viewModel.send(ArtListViewModel.Event.SelectArt(it))
+                                        navController.navigate("detail")
+                                    }
+                                )
                             }
 
                             composable("wait") {

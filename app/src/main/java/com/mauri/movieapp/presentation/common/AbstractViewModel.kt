@@ -12,7 +12,7 @@ abstract class AbstractViewModel<S>(
     defaultState: S
 ) : ViewModel() {
 
-    protected val mutableState: MutableStateFlow<S> = handle.getMutableStateFlow(keyState, defaultState)
+    private val mutableState: MutableStateFlow<S> = handle.getMutableStateFlow(keyState, defaultState)
     val state: StateFlow<S>
         get() = mutableState.asStateFlow()
 

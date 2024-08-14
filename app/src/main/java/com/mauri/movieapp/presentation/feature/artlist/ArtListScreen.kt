@@ -31,65 +31,65 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.mauri.movieapp.presentation.model.ArtVM
 
 
 object ArtListScreen {
 
     @Composable
     fun DetailRender(
-        id: String,
         state: ArtListViewModel.State.Success
     ) {
 
-        val art = state.data.first { it.id.toString() == id }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 10.dp, end = 10.dp),
-            contentAlignment = Alignment.TopCenter
-        ) {
-
-            Column(
+        with(checkNotNull(state.selectedArt)) {
+            Box(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .padding(start = 10.dp, end = 10.dp),
+                contentAlignment = Alignment.TopCenter
             ) {
-                Row {
-                    AsyncImage(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp) ,
-                        contentScale = ContentScale.Crop,
-                        model = art.image,
-                        contentDescription = null
+
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Row {
+                        AsyncImage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(300.dp) ,
+                            contentScale = ContentScale.Crop,
+                            model = image,
+                            contentDescription = null
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row {
+                        Text(
+                            text = "Author: $title",
+                            fontSize = 15.sp
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row {
+                        Text(
+                            text = "Artist display: $artistDisplay",
+                            fontSize = 15.sp
+                        )
+                    }
+                    Spacer(
+                        modifier = Modifier.height(10.dp)
                     )
+                    Row {
+                        AndroidView(
+                            factory = { context -> TextView(context) },
+                            update = {
+                                it.text = HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_COMPACT)
+                            }
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
-                Spacer(modifier = Modifier.height(10.dp))
-                Row {
-                    Text(
-                        text = "Author: ${art.title}",
-                        fontSize = 15.sp
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                Row {
-                    Text(
-                        text = "Artist display: ${art.artistDisplay}",
-                        fontSize = 15.sp
-                    )
-                }
-                Spacer(
-                    modifier = Modifier.height(10.dp)
-                )
-                Row {
-                    AndroidView(
-                        factory = { context -> TextView(context) },
-                        update = {
-                            it.text = HtmlCompat.fromHtml(art.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
-                        }
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }
@@ -97,15 +97,15 @@ object ArtListScreen {
     @Composable
     fun SuccessRender(
         state: ArtListViewModel.State.Success,
-        navController: NavHostController,
-        onNextPage: () -> Unit
+        onNextPage: () -> Unit,
+        onSelectItem: (ArtVM) -> Unit
     ) {
         LazyColumn {
             items(state.data.size, itemContent = {
                 state.data[it].run {
                     Row(
                         modifier = Modifier
-                            .clickable { navController.navigate("detail/${id}") }
+                            .clickable { onSelectItem(this) }
                             .fillMaxWidth()
                             .padding(10.dp)
                     ) {
