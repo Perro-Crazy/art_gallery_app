@@ -50,19 +50,7 @@ class ArtListViewModel(
                         copy(
                             currentPage = artList.currentPage,
                             totalPages = artList.totalPages,
-                            data = data + artList.data.map {
-                                with(it) {
-                                    ArtVM(
-                                        id = id,
-                                        title = title,
-                                        mainReferenceNumber = mainReferenceNumber,
-                                        artistDisplay = artistDisplay,
-                                        description = description,
-                                        origin = origin,
-                                        image = image
-                                    )
-                                }
-                            }
+                            data = data + artList.data.map { ArtVM.from(it) }
                         )
                     }
                 )
@@ -77,19 +65,7 @@ class ArtListViewModel(
                     State.Success(
                         totalPages = totalPages,
                         currentPage = currentPage,
-                        data = data.map {
-                            with(it) {
-                                ArtVM(
-                                    id = id,
-                                    title = title,
-                                    image = image,
-                                    mainReferenceNumber = mainReferenceNumber,
-                                    artistDisplay = artistDisplay,
-                                    description = description,
-                                    origin = origin
-                                )
-                            }
-                        }
+                        data = data.map { ArtVM.from(it) }
                     )
                 }
             )

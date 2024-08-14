@@ -22,23 +22,7 @@ class ArtListUseCase(
             ArtContainerBM(
                 currentPage = container.pagination.currentPage,
                 totalPages = container.pagination.totalPages,
-                data = container.data
-                    .filter {
-                        !it.title.isNullOrBlank() && !it.imageId.isNullOrBlank() && !it.description.isNullOrBlank() && !it.origin.isNullOrBlank()
-                    }
-                    .map {
-                        with(it) {
-                            ArtBM(
-                                id = id,
-                                title = checkNotNull(title),
-                                mainReferenceNumber = mainReferenceNumber,
-                                artistDisplay = artistDisplay,
-                                description = checkNotNull(description),
-                                origin = checkNotNull(origin),
-                                image = "https://www.artic.edu/iiif/2/$imageId/full/843,/0/default.jpg"
-                            )
-                        }
-                    }
+                data = container.data.filter { ArtBM.valid(it) }.map { ArtBM.from(it) }
             )
         }
     }
