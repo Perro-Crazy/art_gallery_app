@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.mauri.movieapp.domain.ArtListUseCase
-import com.mauri.movieapp.foundation.AbstractViewModel
+import com.mauri.movieapp.presentation.common.AbstractViewModel
 import com.mauri.movieapp.presentation.model.ArtVM
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -22,39 +22,69 @@ class ArtListViewModel(
     fun send(event: Event) {
         viewModelScope.launch {
             when (event) {
-                is Event.SelectArt -> handleSelectArt(event)
+                is Event.NextPage -> handleNextPage()
             }
         }
     }
 
-    private suspend fun handleSelectArt(event: Event.SelectArt) {
+    private suspend fun handleNextPage() {
         if(mutableState.value is State.Success) {
-            setState((mutableState.value as State.Success).copy(selectedArt = event.art))
+
+            with((mutableState.value as State.Success)) {
+                setState(
+                    artListUseCase(
+                        ArtListUseCase.Parameter(
+                            totalPages = totalPages,
+                            currentPage = currentPage
+                        )
+                    ).let { artList ->
+                        copy(
+                            currentPage = artList.currentPage,
+                            totalPages = artList.totalPages,
+                            data = data + artList.data.map {
+                                with(it) {
+                                    ArtVM(
+                                        id = id,
+                                        title = title,
+                                        mainReferenceNumber = mainReferenceNumber,
+                                        artistDisplay = artistDisplay,
+                                        image = image
+                                    )
+                                }
+                            }
+                        )
+                    }
+                )
+            }
         }
     }
 
     private suspend fun handleInit() {
         if(mutableState.value is State.Loading) {
             setState(
-                State.Success(
-                    data = artListUseCase().map {
-                        with(it) {
-                            ArtVM(
-                                id = id,
-                                title = title,
-                                mainReferenceNumber = mainReferenceNumber,
-                                artistDisplay = artistDisplay,
-                                image = image
-                            )
+                with(artListUseCase()) {
+                    State.Success(
+                        totalPages = totalPages,
+                        currentPage = currentPage,
+                        data = data.map {
+                            with(it) {
+                                ArtVM(
+                                    id = id,
+                                    title = title,
+                                    mainReferenceNumber = mainReferenceNumber,
+                                    artistDisplay = artistDisplay,
+                                    image = image
+                                )
+                            }
                         }
-                    }
-                )
+                    )
+                }
             )
         }
     }
 
     sealed class Event {
-        data class SelectArt(val art: ArtVM?): Event()
+        data object NextPage : Event()
     }
 
     sealed class State : Parcelable {
@@ -64,7 +94,8 @@ class ArtListViewModel(
         @Parcelize
         data class Success(
             val data: List<ArtVM>,
-            val selectedArt: ArtVM? = null
+            val currentPage: Int,
+            val totalPages: Int
         ) : State()
     }
 

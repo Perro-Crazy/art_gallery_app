@@ -1,8 +1,7 @@
-package com.mauri.movieapp.foundation
+package com.mauri.movieapp.presentation.common
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.mauri.movieapp.presentation.common.getMutableStateFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

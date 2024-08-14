@@ -15,16 +15,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import kotlinx.coroutines.launch
 
 
 object ArtListScreen {
@@ -50,7 +49,8 @@ object ArtListScreen {
     @Composable
     fun SuccessRender(
         state: ArtListViewModel.State.Success,
-        navController: NavHostController
+        navController: NavHostController,
+        onNextPage: () -> Unit
     ) {
         LazyColumn {
             items(state.data.size, itemContent = {
@@ -80,6 +80,7 @@ object ArtListScreen {
                     }
 
                     if (it == state.data.size - 1) {
+                        onNextPage()
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
@@ -96,20 +97,15 @@ object ArtListScreen {
 
     @Composable
     fun LoadingRender(
-        viewModel: ArtListViewModel,
-        lifecycleScope: LifecycleCoroutineScope,
+        state: ArtListViewModel.State,
         navController: NavHostController
     ) {
-        lifecycleScope.launch {
-            viewModel.state.collect {
-                when (it) {
-                    is ArtListViewModel.State.Success -> navController.navigate("list") {
-                        popUpTo(0)
-                    }
-                    else -> {}
-                }
+        if (state is ArtListViewModel.State.Success) {
+            navController.navigate("list") {
+                popUpTo(0)
             }
         }
+
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
