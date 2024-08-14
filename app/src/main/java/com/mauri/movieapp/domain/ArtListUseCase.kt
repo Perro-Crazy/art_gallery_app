@@ -9,10 +9,19 @@ class ArtListUseCase(
 ) {
     suspend operator fun invoke(parameter: Parameter? = null): ArtContainerBM {
         val nextPage = parameter?.currentPage?.let { it + 1 }
+
+        parameter?.run {
+            if (currentPage == totalPages) return ArtContainerBM(
+                data = emptyList(),
+                currentPage = parameter.currentPage,
+                totalPages = parameter.totalPages
+            )
+        }
+
         return artRepository.get(nextPage).let { container ->
             ArtContainerBM(
                 currentPage = container.pagination.currentPage,
-                totalPages = container.pagination.currentPage,
+                totalPages = container.pagination.totalPages,
                 data = container.data
                     .filter { it.imageId != null }
                     .map {
