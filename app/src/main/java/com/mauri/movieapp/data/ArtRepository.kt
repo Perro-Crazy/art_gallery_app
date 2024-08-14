@@ -14,7 +14,7 @@ class ArtRepository(
         return httpClient.prepareGet {
             url("https://api.artic.edu/api/v1/artworks")
             parameter("limit", "50")
-            parameter("fields", "id,title,artist_display,main_reference_number,image_id,description")
+            parameter("fields", "id,title,artist_display,main_reference_number,image_id,description,place_of_origin")
             page?.also { parameter("page", it) }
         }.execute().body<ArtContainerDM>()
     }

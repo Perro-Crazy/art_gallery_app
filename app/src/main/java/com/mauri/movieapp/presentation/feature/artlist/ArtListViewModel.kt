@@ -49,6 +49,7 @@ class ArtListViewModel(
                                         mainReferenceNumber = mainReferenceNumber,
                                         artistDisplay = artistDisplay,
                                         description = description,
+                                        origin = origin,
                                         image = image
                                     )
                                 }
@@ -75,7 +76,8 @@ class ArtListViewModel(
                                     image = image,
                                     mainReferenceNumber = mainReferenceNumber,
                                     artistDisplay = artistDisplay,
-                                    description = description
+                                    description = description,
+                                    origin = origin
                                 )
                             }
                         }

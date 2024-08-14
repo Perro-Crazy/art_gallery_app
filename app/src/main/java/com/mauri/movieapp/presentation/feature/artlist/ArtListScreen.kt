@@ -104,27 +104,30 @@ object ArtListScreen {
             items(state.data.size, itemContent = {
                 state.data[it].run {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .clickable { navController.navigate("detail/${id}") }
-                            .fillMaxSize()
+                            .fillMaxWidth()
                             .padding(10.dp)
                     ) {
-                        AsyncImage(
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(64.dp)
-                                .clip(CircleShape)
-                                .border(1.dp, Color.Blue, CircleShape),
-                            model = image,
-                            contentDescription = null
-                        )
-                        Text(
-                            text = title,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp)
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            AsyncImage(
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(64.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, Color.Blue, CircleShape),
+                                model = image,
+                                contentDescription = null
+                            )
+                            Column(
+                                modifier = Modifier.padding(start = 10.dp)
+                            ) {
+                                Text(text = title)
+                                Text(text = origin)
+                            }
+                        }
                     }
 
                     if (it == state.data.size - 1) {

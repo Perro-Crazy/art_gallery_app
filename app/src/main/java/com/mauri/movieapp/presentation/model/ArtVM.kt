@@ -10,5 +10,6 @@ data class ArtVM(
   val image: String,
   val mainReferenceNumber: String,
   val artistDisplay: String,
-  val description: String
+  val description: String,
+  val origin: String
 ): Parcelable
