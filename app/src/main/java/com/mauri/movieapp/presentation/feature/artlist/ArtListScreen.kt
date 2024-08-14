@@ -2,7 +2,6 @@ package com.mauri.movieapp.presentation.feature.artlist
 
 import android.widget.TextView
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,10 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
@@ -29,8 +26,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -135,32 +130,19 @@ object ArtListScreen {
 
             LazyColumn {
                 items(state.data.size, itemContent = {
-                    state.data[it].run {
-                        Row(
-                            modifier = Modifier
-                                .clickable { onSelectItem(this) }
-                                .fillMaxWidth()
-                                .padding(10.dp)
+                    state.data[it].also { art ->
+
+                        Column(
+                            modifier = Modifier.padding(5.dp)
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                AsyncImage(
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .size(64.dp)
-                                        .clip(CircleShape)
-                                        .border(1.dp, Color.Blue, CircleShape),
-                                    model = image,
-                                    contentDescription = null
-                                )
-                                Column(
-                                    modifier = Modifier.padding(start = 10.dp)
-                                ) {
-                                    Text(text = title)
-                                    Text(text = origin)
-                                }
-                            }
+                            AsyncImage(
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.clickable { onSelectItem(art) }.fillMaxWidth(),
+                                model = art.image,
+                                contentDescription = null
+                            )
+                            Text(text = art.title)
+                            Text(text = art.origin)
                         }
 
                         if (it == state.data.size - 1) {
