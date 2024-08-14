@@ -14,5 +14,7 @@ data class ArtDM (
   @SerialName("main_reference_number")
   val mainReferenceNumber: String,
   @SerialName("artist_display")
-  val artistDisplay: String
+  val artistDisplay: String,
+  @SerialName("description")
+  val description:  String?
 )

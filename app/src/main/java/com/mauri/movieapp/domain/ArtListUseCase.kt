@@ -23,7 +23,7 @@ class ArtListUseCase(
                 currentPage = container.pagination.currentPage,
                 totalPages = container.pagination.totalPages,
                 data = container.data
-                    .filter { it.imageId != null }
+                    .filter { it.imageId != null && !it.description.isNullOrEmpty() }
                     .map {
                         with(it) {
                             ArtBM(
@@ -31,6 +31,7 @@ class ArtListUseCase(
                                 title = title,
                                 mainReferenceNumber = mainReferenceNumber,
                                 artistDisplay = artistDisplay,
+                                description = description.orEmpty(),
                                 image = "https://www.artic.edu/iiif/2/$imageId/full/843,/0/default.jpg"
                             )
                         }
