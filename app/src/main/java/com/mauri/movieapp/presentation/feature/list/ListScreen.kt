@@ -23,6 +23,9 @@ import coil.compose.AsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 object ListScreen {
+
+    const val route = "list"
+
     @Composable
     fun ListRender(
         viewModel: ListViewModel,

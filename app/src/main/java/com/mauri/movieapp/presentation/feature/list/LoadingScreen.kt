@@ -22,7 +22,7 @@ object LoadingScreen {
 
         if (state is ListViewModel.State.Success) {
             LaunchedEffect(navController) {
-                navController.navigate("list") {
+                navController.navigate(ListScreen.route) {
                     popUpTo(0)
                 }
             }
