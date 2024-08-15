@@ -16,50 +16,46 @@ class ArtListViewModel(
 
     init {
         viewModelScope.launch {
-            handleInit()
+            if (state.value is State.Loading) handleInit()
         }
     }
     fun send(event: Event) {
         viewModelScope.launch {
             when (event) {
+                is Event.RetryInit -> handleInit()
                 is Event.NextPage -> handleNextPage()
-                is Event.SelectArt -> handleSelectArt(event)
             }
         }
     }
 
-    private suspend fun handleSelectArt(event: Event.SelectArt) {
-        if(state.value is State.Success) {
-            setState(
-                (state.value as State.Success).copy(selectedArt = event.art)
-            )
-        }
-    }
-
     private suspend fun handleNextPage() {
-        if(state.value is State.Success) {
-
+        runCatching {
             with((state.value as State.Success)) {
-                setState(
-                    artListUseCase(
-                        ArtListUseCase.Parameter(
-                            totalPages = totalPages,
-                            currentPage = currentPage
-                        )
-                    ).let { artList ->
-                        copy(
-                            currentPage = artList.currentPage,
-                            totalPages = artList.totalPages,
-                            data = data + artList.data.map { ArtVM.from(it) }
-                        )
-                    }
-                )
+                artListUseCase(
+                    ArtListUseCase.Parameter(
+                        totalPages = totalPages,
+                        currentPage = currentPage
+                    )
+                ).let { artList ->
+                    copy(
+                        currentPage = artList.currentPage,
+                        totalPages = artList.totalPages,
+                        data = data + artList.data.map { ArtVM.from(it) },
+                        errorOnNextPage = false
+                    )
+                }.run {
+                    setState(this)
+                }
+            }
+        }.onFailure {
+            with((state.value as State.Success)) {
+                setState(copy(errorOnNextPage = true))
             }
         }
     }
 
     private suspend fun handleInit() {
-        if(state.value is State.Loading) {
+        runCatching {
             setState(
                 with(artListUseCase()) {
                     State.Success(
@@ -69,12 +65,14 @@ class ArtListViewModel(
                     )
                 }
             )
+        }.onFailure {
+            setState(State.ErrorOnInitialLoad)
         }
     }
 
     sealed class Event {
+        data object RetryInit : Event()
         data object NextPage : Event()
-        data class SelectArt(val art: ArtVM? = null) : Event()
     }
 
     sealed class State : Parcelable {
@@ -86,8 +84,11 @@ class ArtListViewModel(
             val data: List<ArtVM>,
             val currentPage: Int,
             val totalPages: Int,
-            val selectedArt: ArtVM? = null
+            val errorOnNextPage: Boolean = false
         ) : State()
+
+        @Parcelize
+        data object ErrorOnInitialLoad : State()
     }
 
     companion object  {

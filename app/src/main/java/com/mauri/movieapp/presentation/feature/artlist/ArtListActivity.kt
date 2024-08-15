@@ -6,12 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.mauri.movieapp.presentation.common.theme.MovieAppTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -32,16 +36,19 @@ class ArtListActivity : ComponentActivity() {
                         startDestination = "wait"
                     ) {
 
-                        composable("detail") {
+                        composable(
+                            route = "detail/{id_art}",
+                            arguments = listOf(
+                                navArgument("id_art") {
+                                    type = NavType.IntType
+                                }
+                            )
+                        ) {
                             ArtListScreen.DetailRender(
+                                idArt = checkNotNull(it.arguments?.getInt("id_art")),
                                 state = (viewModel.state.collectAsState().value as ArtListViewModel.State.Success),
                                 onBack = {
-                                    viewModel.send(ArtListViewModel.Event.SelectArt())
-                                    navController.popBackStack(
-                                        route = "list",
-                                        inclusive = false,
-                                        saveState = false
-                                    )
+                                    navController.popBackStack()
                                 }
                             )
                         }
@@ -53,10 +60,23 @@ class ArtListActivity : ComponentActivity() {
                                     viewModel.send(ArtListViewModel.Event.NextPage)
                                 },
                                 onSelectItem = {
-                                    viewModel.send(ArtListViewModel.Event.SelectArt(it))
-                                    navController.navigate("detail")
+                                    navController.navigate("detail/${it}")
                                 }
                             )
+                        }
+
+                        composable("error") {
+                            Text(text = "Error")
+                            Button(
+                                onClick = {
+                                    viewModel.send(ArtListViewModel.Event.RetryInit)
+                                    navController.navigate("wait") {
+                                        popUpTo(0)
+                                    }
+                                }
+                            ) {
+                                Text(text = "Tentar novamente")
+                            }
                         }
 
                         composable("wait") {

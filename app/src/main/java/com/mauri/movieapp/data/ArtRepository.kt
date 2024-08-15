@@ -13,7 +13,7 @@ class ArtRepository(
     suspend fun get(page: Int?): ArtContainerDM {
         return httpClient.prepareGet {
             url("https://api.artic.edu/api/v1/artworks")
-            parameter("limit", "50")
+            parameter("limit", "5")
             parameter("fields", "id,artist_title,artist_display,main_reference_number,image_id,description,place_of_origin")
             page?.also { parameter("page", it) }
         }.execute().body<ArtContainerDM>()

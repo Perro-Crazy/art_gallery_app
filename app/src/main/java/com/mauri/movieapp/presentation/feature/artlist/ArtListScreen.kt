@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,7 +34,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.HtmlCompat
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.mauri.movieapp.presentation.model.ArtVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 object ArtListScreen {
@@ -41,10 +41,10 @@ object ArtListScreen {
     @Composable
     fun DetailRender(
         state: ArtListViewModel.State.Success,
-        onBack: () -> Unit
+        onBack: () -> Unit,
+        idArt: Int
     ) {
-
-        state.selectedArt?.run {
+        state.data[idArt].run {
             Column {
                 TopAppBar(
                     title = { Text(text = title) },
@@ -118,7 +118,7 @@ object ArtListScreen {
     fun ListRender(
         state: ArtListViewModel.State.Success,
         onNextPage: () -> Unit,
-        onSelectItem: (ArtVM) -> Unit
+        onSelectItem: (Int) -> Unit
     ) {
 
         Column {
@@ -137,7 +137,9 @@ object ArtListScreen {
                         ) {
                             AsyncImage(
                                 contentScale = ContentScale.Crop,
-                                modifier = Modifier.clickable { onSelectItem(art) }.fillMaxWidth(),
+                                modifier = Modifier
+                                    .clickable { onSelectItem(it) }
+                                    .fillMaxWidth(),
                                 model = art.image,
                                 contentDescription = null
                             )
@@ -145,7 +147,7 @@ object ArtListScreen {
                             Text(text = art.origin)
                         }
 
-                        if (it == state.data.size - 1) {
+                        if (it == state.data.size - 1 && !state.errorOnNextPage) {
                             onNextPage()
                             Box(
                                 contentAlignment = Alignment.Center,
@@ -154,6 +156,12 @@ object ArtListScreen {
                                     .padding(10.dp)
                             ) {
                                 CircularProgressIndicator()
+                            }
+                        }
+
+                        if (it == state.data.size - 1 && state.errorOnNextPage) {
+                            Button(onClick = { onNextPage() }) {
+                                Text(text = "Tentar novamente")
                             }
                         }
                     }
@@ -169,6 +177,12 @@ object ArtListScreen {
     ) {
         if (state is ArtListViewModel.State.Success) {
             navController.navigate("list") {
+                popUpTo(0)
+            }
+        }
+
+        if (state is ArtListViewModel.State.ErrorOnInitialLoad) {
+            navController.navigate("error") {
                 popUpTo(0)
             }
         }
