@@ -12,7 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 
 object LoadingScreen {
-    const val route = "wait"
+    const val ROUTE = "wait"
     @Composable
     fun Render(
         navController: NavHostController,
@@ -23,7 +23,7 @@ object LoadingScreen {
 
         if (state is ListViewModel.State.Success) {
             LaunchedEffect(navController) {
-                navController.navigate(ListScreen.route) {
+                navController.navigate(ListScreen.ROUTE) {
                     popUpTo(0)
                 }
             }

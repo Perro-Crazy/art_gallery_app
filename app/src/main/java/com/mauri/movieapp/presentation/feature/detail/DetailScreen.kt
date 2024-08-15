@@ -17,6 +17,7 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -40,69 +41,82 @@ object DetailScreen {
     ) {
 
         with(art) {
-            Column {
-                TopAppBar(
-                    title = { Text(text = title) },
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            navController.popBackStack()
-                        }) {
-                            Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null)
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    TopAppBar(
+                        title = { Text(text = title) },
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                navController.popBackStack()
+                            }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
+                                    contentDescription = null
+                                )
+                            }
                         }
-                    }
-                )
-
-                BackHandler {
-                    navController.popBackStack()
+                    )
                 }
+            ) { padding ->
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(start = 10.dp, end = 10.dp),
-                    contentAlignment = Alignment.TopCenter
-                ) {
+                Column(modifier = Modifier.padding(padding)) {
 
-                    Column(
+                    BackHandler {
+                        navController.popBackStack()
+                    }
+
+                    Box(
                         modifier = Modifier
-                            .verticalScroll(rememberScrollState())
+                            .fillMaxSize()
+                            .padding(start = 10.dp, end = 10.dp),
+                        contentAlignment = Alignment.TopCenter
                     ) {
-                        Row {
-                            AsyncImage(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(300.dp) ,
-                                contentScale = ContentScale.Crop,
-                                model = image,
-                                contentDescription = null
+
+                        Column(
+                            modifier = Modifier
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Row {
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(300.dp),
+                                    contentScale = ContentScale.Crop,
+                                    model = image,
+                                    contentDescription = null
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row {
+                                Text(
+                                    text = "Author: $title",
+                                    fontSize = 15.sp
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row {
+                                Text(
+                                    text = "Artist display: $artistDisplay",
+                                    fontSize = 15.sp
+                                )
+                            }
+                            Spacer(
+                                modifier = Modifier.height(10.dp)
                             )
+                            Row {
+                                AndroidView(
+                                    factory = { context -> TextView(context) },
+                                    update = {
+                                        it.text = HtmlCompat.fromHtml(
+                                            description,
+                                            HtmlCompat.FROM_HTML_MODE_COMPACT
+                                        )
+                                    }
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
                         }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row {
-                            Text(
-                                text = "Author: $title",
-                                fontSize = 15.sp
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row {
-                            Text(
-                                text = "Artist display: $artistDisplay",
-                                fontSize = 15.sp
-                            )
-                        }
-                        Spacer(
-                            modifier = Modifier.height(10.dp)
-                        )
-                        Row {
-                            AndroidView(
-                                factory = { context -> TextView(context) },
-                                update = {
-                                    it.text = HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_COMPACT)
-                                }
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
                     }
                 }
             }

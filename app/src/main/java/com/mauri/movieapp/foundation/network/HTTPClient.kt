@@ -2,6 +2,7 @@ package com.mauri.movieapp.foundation.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
@@ -18,9 +19,15 @@ object HTTPClient {
                 )
             }
             install(HttpTimeout) {
-                socketTimeoutMillis = 10000
-                connectTimeoutMillis = 10000
-                socketTimeoutMillis = 10000
+                connectTimeoutMillis = 20000
+                socketTimeoutMillis = 20000
+                requestTimeoutMillis = 20000
+            }
+
+            install(HttpRequestRetry) {
+                retryOnExceptionIf(maxRetries = 0) { _, cause ->
+                    cause is RuntimeException
+                }
             }
         }
     }

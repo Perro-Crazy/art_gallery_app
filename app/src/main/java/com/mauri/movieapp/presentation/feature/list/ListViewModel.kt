@@ -14,7 +14,7 @@ class ListViewModel(
     handle: SavedStateHandle,
     private val listInitialDataUseCase: ListInitialDataUseCase,
     private val listPerPageUseCase: ListPerPageUseCase
-) : AbstractViewModel<ListViewModel.State>(handle, FLOW_KEY, State.Loading) {
+) : AbstractViewModel<ListViewModel.State, ListViewModel.Effect>(handle, FLOW_KEY, State.Loading) {
 
     init {
         viewModelScope.launch {
@@ -50,9 +50,10 @@ class ListViewModel(
                 }
             }
         }.onFailure {
-            with((state.value as State.Success)) {
-                setState(copy(errorOnNextPage = true))
-            }
+            sendEffect(Effect.Error)
+//            with((state.value as State.Success)) {
+//                setState(copy(errorOnNextPage = true))
+//            }
         }
     }
 
@@ -75,6 +76,10 @@ class ListViewModel(
     sealed class Event {
         data object RetryInit : Event()
         data object NextPage : Event()
+    }
+
+    sealed class Effect {
+        data object Error: Effect()
     }
 
     sealed class State : Parcelable {
