@@ -13,16 +13,16 @@ class ListPerPageUseCase(
         parameter.run {
             if (currentPage == totalPages) return ArtContainerBM(
                 data = emptyList(),
-                currentPage = parameter.currentPage,
-                totalPages = parameter.totalPages
+                currentPage = currentPage,
+                totalPages = totalPages
             )
         }
 
-        return artRepository.get(nextPage).let { container ->
+        return with(artRepository.get(nextPage)){
             ArtContainerBM(
-                currentPage = container.pagination.currentPage,
-                totalPages = container.pagination.totalPages,
-                data = container.data.filter { ArtBM.valid(it) }.map { ArtBM.from(it) }
+                currentPage = pagination.currentPage,
+                totalPages = pagination.totalPages,
+                data = data.filter { ArtBM.valid(it) }.map { ArtBM.from(it) }
             )
         }
     }

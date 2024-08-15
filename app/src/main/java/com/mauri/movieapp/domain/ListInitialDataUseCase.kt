@@ -8,11 +8,11 @@ class ListInitialDataUseCase(
     private val artRepository: ArtRepository
 ) {
     suspend operator fun invoke(): ArtContainerBM {
-        return artRepository.get().let { container ->
+        return with(artRepository.get()) {
             ArtContainerBM(
-                currentPage = container.pagination.currentPage,
-                totalPages = container.pagination.totalPages,
-                data = container.data.filter { ArtBM.valid(it) }.map { ArtBM.from(it) }
+                currentPage = pagination.currentPage,
+                totalPages = pagination.totalPages,
+                data = data.filter { ArtBM.valid(it) }.map { ArtBM.from(it) }
             )
         }
     }
