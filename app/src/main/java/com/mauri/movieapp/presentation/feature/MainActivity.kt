@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -34,7 +35,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         modifier = Modifier.padding(padding),
                         navController = navController,
-                        startDestination = "wait"
+                        startDestination = LoadingScreen.route
                     ) {
 
                         composable<ArtVM> {
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable("list") {
+                        composable(ListScreen.route) {
                             ListScreen.ListRender(
                                 viewModel = getViewModel(),
                                 navController = navController
@@ -52,20 +53,22 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("error") {
-                            Text(text = "Error")
-                            Button(
-                                onClick = {
-                                    getViewModel<ListViewModel>().send(ListViewModel.Event.RetryInit)
-                                    navController.navigate("wait") {
-                                        popUpTo(0)
+                            Column {
+                                Text(text = "Error")
+                                Button(
+                                    onClick = {
+                                        getViewModel<ListViewModel>().send(ListViewModel.Event.RetryInit)
+                                        navController.navigate(LoadingScreen.route) {
+                                            popUpTo(0)
+                                        }
                                     }
+                                ) {
+                                    Text(text = "Tentar novamente")
                                 }
-                            ) {
-                                Text(text = "Tentar novamente")
                             }
                         }
 
-                        composable("wait") {
+                        composable(LoadingScreen.route) {
                             LoadingScreen.Render(
                                 viewModel = getViewModel(),
                                 navController = navController

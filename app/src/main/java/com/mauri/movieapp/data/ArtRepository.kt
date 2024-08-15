@@ -10,7 +10,7 @@ import io.ktor.client.request.url
 class ArtRepository(
     private val httpClient: HttpClient
 ) {
-    suspend fun get(page: Int?): ArtContainerDM {
+    suspend fun get(page: Int? = 1): ArtContainerDM {
         return httpClient.prepareGet {
             url("https://api.artic.edu/api/v1/artworks")
             parameter("limit", "10")

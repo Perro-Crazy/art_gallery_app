@@ -12,6 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 
 object LoadingScreen {
+    const val route = "wait"
     @Composable
     fun Render(
         navController: NavHostController,
