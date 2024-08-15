@@ -1,4 +1,4 @@
-package com.mauri.movieapp.presentation.feature.artlist
+package com.mauri.movieapp.presentation.feature
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,9 +17,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mauri.movieapp.presentation.common.theme.MovieAppTheme
+import com.mauri.movieapp.presentation.feature.artlist.ArtListScreen
+import com.mauri.movieapp.presentation.feature.artlist.ArtListViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ArtListActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModel<ArtListViewModel>()
 
