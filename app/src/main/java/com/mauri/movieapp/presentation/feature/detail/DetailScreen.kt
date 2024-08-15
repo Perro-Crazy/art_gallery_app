@@ -82,7 +82,7 @@ object DetailScreen {
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(300.dp),
-                                    contentScale = ContentScale.Crop,
+                                    contentScale = ContentScale.Fit,
                                     model = image,
                                     contentDescription = null
                                 )
