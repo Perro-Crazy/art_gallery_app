@@ -1,6 +1,7 @@
-package com.mauri.movieapp.foundation
+package com.mauri.movieapp.presentation.feature
 
 import android.app.Application
+import com.mauri.movieapp.foundation.DI
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
