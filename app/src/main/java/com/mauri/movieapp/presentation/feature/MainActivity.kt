@@ -18,7 +18,7 @@ import com.mauri.movieapp.presentation.common.theme.MovieAppTheme
 import com.mauri.movieapp.presentation.feature.detail.DetailScreen
 import com.mauri.movieapp.presentation.feature.list.ListScreen
 import com.mauri.movieapp.presentation.feature.list.ListViewModel
-import com.mauri.movieapp.presentation.feature.boot.LoadingScreen
+import com.mauri.movieapp.presentation.feature.list.LoadingScreen
 import com.mauri.movieapp.presentation.model.ArtVM
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 

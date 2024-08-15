@@ -1,4 +1,4 @@
-package com.mauri.movieapp.presentation.feature.boot
+package com.mauri.movieapp.presentation.feature.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.mauri.movieapp.presentation.feature.list.ListViewModel
 
 object LoadingScreen {
     @Composable
