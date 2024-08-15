@@ -4,7 +4,7 @@ import com.mauri.movieapp.data.ArtRepository
 import com.mauri.movieapp.domain.entity.ArtBM
 import com.mauri.movieapp.domain.entity.ArtContainerBM
 
-class ArtListUseCase(
+class ListPerPageUseCase(
     private val artRepository: ArtRepository
 ) {
     suspend operator fun invoke(parameter: Parameter): ArtContainerBM {
@@ -19,16 +19,6 @@ class ArtListUseCase(
         }
 
         return artRepository.get(nextPage).let { container ->
-            ArtContainerBM(
-                currentPage = container.pagination.currentPage,
-                totalPages = container.pagination.totalPages,
-                data = container.data.filter { ArtBM.valid(it) }.map { ArtBM.from(it) }
-            )
-        }
-    }
-
-    suspend operator fun invoke(): ArtContainerBM {
-        return artRepository.get().let { container ->
             ArtContainerBM(
                 currentPage = container.pagination.currentPage,
                 totalPages = container.pagination.totalPages,

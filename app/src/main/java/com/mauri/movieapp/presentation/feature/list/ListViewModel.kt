@@ -3,7 +3,8 @@ package com.mauri.movieapp.presentation.feature.list
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.mauri.movieapp.domain.ArtListUseCase
+import com.mauri.movieapp.domain.ListInitialDataUseCase
+import com.mauri.movieapp.domain.ListPerPageUseCase
 import com.mauri.movieapp.presentation.common.AbstractViewModel
 import com.mauri.movieapp.presentation.model.ArtVM
 import kotlinx.coroutines.launch
@@ -11,7 +12,8 @@ import kotlinx.parcelize.Parcelize
 
 class ListViewModel(
     handle: SavedStateHandle,
-    private val artListUseCase: ArtListUseCase
+    private val listInitialDataUseCase: ListInitialDataUseCase,
+    private val listPerPageUseCase: ListPerPageUseCase
 ) : AbstractViewModel<ListViewModel.State>(handle, FLOW_KEY, State.Loading) {
 
     init {
@@ -31,8 +33,8 @@ class ListViewModel(
     private suspend fun handleNextPage() {
         runCatching {
             with((state.value as State.Success)) {
-                artListUseCase(
-                    ArtListUseCase.Parameter(
+                listPerPageUseCase(
+                    ListPerPageUseCase.Parameter(
                         totalPages = totalPages,
                         currentPage = currentPage
                     )
@@ -57,7 +59,7 @@ class ListViewModel(
     private suspend fun handleInit() {
         runCatching {
             setState(
-                with(artListUseCase()) {
+                with(listInitialDataUseCase()) {
                     State.Success(
                         totalPages = totalPages,
                         currentPage = currentPage,
