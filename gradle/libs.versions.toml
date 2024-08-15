@@ -13,6 +13,8 @@ koin = "3.5.6"
 serialization = "1.9.23"
 coil = "2.7.0"
 navigationCompose = "2.8.0-beta07"
+mockk = "1.13.12"
+coroutinesTest = "1.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +40,9 @@ ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref =
 koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
