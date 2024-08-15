@@ -9,21 +9,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.mauri.movieapp.presentation.common.theme.MovieAppTheme
-import com.mauri.movieapp.presentation.feature.list.ArtListScreen
-import com.mauri.movieapp.presentation.feature.list.ArtListViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.mauri.movieapp.presentation.feature.detail.DetailScreen
+import com.mauri.movieapp.presentation.feature.list.ListScreen
+import com.mauri.movieapp.presentation.feature.list.ListViewModel
+import com.mauri.movieapp.presentation.feature.boot.LoadingScreen
+import com.mauri.movieapp.presentation.model.ArtVM
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class MainActivity : ComponentActivity() {
-
-    private val viewModel by viewModel<ArtListViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,32 +37,17 @@ class MainActivity : ComponentActivity() {
                         startDestination = "wait"
                     ) {
 
-                        composable(
-                            route = "detail/{id_art}",
-                            arguments = listOf(
-                                navArgument("id_art") {
-                                    type = NavType.IntType
-                                }
-                            )
-                        ) {
-                            ArtListScreen.DetailRender(
-                                idArt = checkNotNull(it.arguments?.getInt("id_art")),
-                                state = (viewModel.state.collectAsState().value as ArtListViewModel.State.Success),
-                                onBack = {
-                                    navController.popBackStack()
-                                }
+                        composable<ArtVM> {
+                            DetailScreen.Render(
+                                art = it.toRoute(),
+                                navController = navController
                             )
                         }
 
                         composable("list") {
-                            ArtListScreen.ListRender(
-                                state = (viewModel.state.collectAsState().value as ArtListViewModel.State.Success),
-                                onNextPage = {
-                                    viewModel.send(ArtListViewModel.Event.NextPage)
-                                },
-                                onSelectItem = {
-                                    navController.navigate("detail/${it}")
-                                }
+                            ListScreen.ListRender(
+                                viewModel = getViewModel(),
+                                navController = navController
                             )
                         }
 
@@ -71,7 +55,7 @@ class MainActivity : ComponentActivity() {
                             Text(text = "Error")
                             Button(
                                 onClick = {
-                                    viewModel.send(ArtListViewModel.Event.RetryInit)
+                                    getViewModel<ListViewModel>().send(ListViewModel.Event.RetryInit)
                                     navController.navigate("wait") {
                                         popUpTo(0)
                                     }
@@ -82,8 +66,8 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable("wait") {
-                            ArtListScreen.LoadingRender(
-                                state = viewModel.state.collectAsState().value,
+                            LoadingScreen.Render(
+                                viewModel = getViewModel(),
                                 navController = navController
                             )
                         }

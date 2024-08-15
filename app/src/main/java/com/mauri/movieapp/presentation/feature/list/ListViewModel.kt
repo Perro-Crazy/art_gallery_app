@@ -9,10 +9,10 @@ import com.mauri.movieapp.presentation.model.ArtVM
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-class ArtListViewModel(
+class ListViewModel(
     handle: SavedStateHandle,
     private val artListUseCase: ArtListUseCase
-) : AbstractViewModel<ArtListViewModel.State>(handle, FLOW_KEY, State.Loading) {
+) : AbstractViewModel<ListViewModel.State>(handle, FLOW_KEY, State.Loading) {
 
     init {
         viewModelScope.launch {

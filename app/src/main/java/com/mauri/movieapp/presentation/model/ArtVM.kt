@@ -3,8 +3,10 @@ package com.mauri.movieapp.presentation.model
 import android.os.Parcelable
 import com.mauri.movieapp.domain.entity.ArtBM
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 data class ArtVM(
   val id: Int,
   val title: String,

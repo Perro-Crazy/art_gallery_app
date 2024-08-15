@@ -10,9 +10,9 @@ activityCompose = "1.9.1"
 composeBom = "2024.06.00"
 ktor = "2.3.3"
 koin = "3.5.6"
-serialization = "1.8.+"
+serialization = "1.9.23"
 coil = "2.7.0"
-navigationCompose = "2.7.7"
+navigationCompose = "2.8.0-beta07"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

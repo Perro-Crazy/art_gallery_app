@@ -17,7 +17,6 @@ data class ArtBM(
             return with(input) {
                 !title.isNullOrBlank() &&
                 !imageId.isNullOrBlank() &&
-                !description.isNullOrBlank() &&
                 !origin.isNullOrBlank()
             }
         }
@@ -28,7 +27,7 @@ data class ArtBM(
                     title = checkNotNull(title),
                     mainReferenceNumber = mainReferenceNumber,
                     artistDisplay = artistDisplay,
-                    description = checkNotNull(description),
+                    description = description.orEmpty(),
                     origin = checkNotNull(origin),
                     image = "https://www.artic.edu/iiif/2/$imageId/full/843,/0/default.jpg"
                 )
