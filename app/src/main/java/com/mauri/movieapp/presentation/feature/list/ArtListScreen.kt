@@ -1,4 +1,4 @@
-package com.mauri.movieapp.presentation.feature.artlist
+package com.mauri.movieapp.presentation.feature.list
 
 import android.widget.TextView
 import androidx.activity.compose.BackHandler
