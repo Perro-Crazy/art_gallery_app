@@ -21,6 +21,7 @@ class ListViewModel(
             if (state.value is State.Loading) handleInit()
         }
     }
+
     fun send(event: Event) {
         viewModelScope.launch {
             when (event) {
