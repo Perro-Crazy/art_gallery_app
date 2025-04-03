@@ -51,9 +51,6 @@ class ListViewModel(
             }
         }.onFailure {
             sendEffect(Effect.Error)
-//            with((state.value as State.Success)) {
-//                setState(copy(errorOnNextPage = true))
-//            }
         }
     }
 
